@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive PDF Viewer</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="pdf.min.js"></script>
+    <script src="pdf.worker.min.js"></script>
+</head>
+<body>
+    <h1>Interactive PDF Book</h1>
+    
+    <div id="pdf-contents">
+        <div id="page-loader">Loading page ...</div>
+        <canvas id="pdf-canvas" width="1000"></canvas>
+    </div>
+
+    <!-- File Upload Form -->
+    <h2>Upload a Book</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="bookFile" name="book" accept="application/pdf" />
+        <button type="submit">Upload Book</button>
+    </form>
+
+    <script>
+        const socket = io('http://localhost:3000'); // Connect to WebSocket server
+        const groupId = "bookGroup"; // Example group ID for all users viewing the same book
+        const _CANVAS = document.querySelector('#pdf-canvas');
+        let _PDF_DOC, _CURRENT_PAGE, _TOTAL_PAGES;
+
+        // Join the group when the page loads
+        socket.emit('joinGroup', groupId);
+
+        // Listen for new book path from server
+        socket.on('newBook', (filePath) => {
+            console.log('New book uploaded:', filePath);
+            renderPDF("1732902187652.pdf"); // Load the new PDF dynamically
+        });
+
+        // Listen for page changes from the server
+        socket.on('pageChanged', (pageNumber) => {
+            showPage(pageNumber);
+        });
+
+        // Function to render the selected PDF file
+        async function renderPDF(path) {
+            try {
+                _PDF_DOC = await pdfjsLib.getDocument({ url: path });
+                _TOTAL_PAGES = _PDF_DOC.numPages;
+                showPage(1); // Show the first page initially
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // Function to render a specific page
+        async function showPage(page_no) {
+            _CURRENT_PAGE = page_no;
+
+            try {
+                const page = await _PDF_DOC.getPage(page_no);
+                const viewport = page.getViewport({ scale: 1.0 });
+                _CANVAS.height = viewport.height;
+                _CANVAS.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: _CANVAS.getContext('2d'),
+                    viewport: viewport
+                };
+
+                await page.render(renderContext).promise;
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // Function to send page change to the server
+        function changePage(pageNumber) {
+            socket.emit('pageChange', groupId, pageNumber);
+        }
+
+        // Example of changing pages (you can add buttons or controls)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' && _CURRENT_PAGE < _TOTAL_PAGES) {
+                changePage(++_CURRENT_PAGE);
+            } else if (event.key === 'ArrowLeft' && _CURRENT_PAGE > 1) {
+                changePage(--_CURRENT_PAGE);
+            }
+        });
+
+        // File upload form submission
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('bookFile');
+            const formData = new FormData();
+            formData.append('book', fileInput.files[0]);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.filePath) {
+                    console.log('File uploaded successfully:', data.filePath);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
+        });
+
+        // Initialize PDF rendering (with the initial PDF path if needed)
+       renderPDF('1732902187652.pdf'); // Initially loaded PDF, replaced after upload
+    </script>
+</body>
+</html>
