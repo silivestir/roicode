@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Classroom</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            cursor: crosshair;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <h1>Live Classroom PDF Reader</h1>
+    <input type="text" id="groupId" placeholder="Enter Group Name" />
+    <button id="createGroupBtn">Create/Join Group</button>
+    <input type="file" id="pdfUpload" accept=".pdf" />
+    <button id="uploadBtn">Upload PDF</button>
+    <select id="pdfList"></select>
+    <button id="downloadBtn">Download PDF</button>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div>
+        <label for="colorPicker">Choose a color:</label>
+        <input type="color" id="colorPicker" value="#000000">
+        <button id="eraseBtn">Erase Drawing</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script>
+        const socket = io();
+        let currentGroupId = '';
+        let currentPdfUrl = '';
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let drawingData = []; // Store drawing data
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function renderPDF(pdfPath) {
+            const pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+
+            pdfjsLib.getDocument(pdfPath).promise.then(pdf => {
+                pdf.getPage(1).then(page => {
+                    const viewport = page.getViewport({ scale: 1 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+                    page.render(renderContext).promise.then(() => {
+                        // Redraw previously drawn items after rendering PDF
+                        drawPreviousItems();
+                    });
+                });
+            });
+        }
+
+        function drawPreviousItems() {
+            ctx.lineWidth = 5;
+
+            drawingData.forEach(item => {
+                ctx.strokeStyle = item.color;
+                ctx.beginPath();
+                ctx.moveTo(item.x0, item.y0);
+                ctx.lineTo(item.x1, item.y1);
+                ctx.stroke();
+            });
+        }
+
+        document.getElementById('createGroupBtn').onclick = () => {
+            const groupId = document.getElementById('groupId').value;
+            if (groupId) {
+                currentGroupId = groupId;
+                socket.emit('createGroup', groupId);
+                socket.emit('joinGroup', groupId);
+                document.getElementById('pdfList').innerHTML = ''; // Clear previous PDFs
+            }
+        };
+
+        document.getElementById('uploadBtn').onclick = async () => {
+            const file = document.getElementById('pdfUpload').files[0];
+            const formData = new FormData();
+            formData.append('pdf', file);
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await response.json();
+
+            // Notify all users in the group about the new PDF
+            socket.emit('uploadPdf', { groupId: currentGroupId, filePath: result.filePath });
+        };
+
+        socket.on('newPdf', (filePath) => {
+            const option = document.createElement('option');
+            option.value = filePath;
+            option.innerText = filePath.split('/').pop();
+            document.getElementById('pdfList').appendChild(option);
+        });
+
+        document.getElementById('pdfList').onchange = (event) => {
+            currentPdfUrl = event.target.value;
+            // Render PDF on canvas for all users
+            socket.emit('renderPdf', { groupId: currentGroupId, pdfPath: currentPdfUrl });
+        };
+
+        socket.on('renderPdf', (pdfPath) => {
+            renderPDF(pdfPath);
+        });
+
+        // Drawing logic
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            ctx.strokeStyle = document.getElementById('colorPicker').value;
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+
+            // Store drawing data
+            drawingData.push({ 
+                x0: lastX, 
+                y0: lastY, 
+                x1: e.offsetX, 
+                y1: e.offsetY, 
+                color: ctx.strokeStyle 
+            });
+
+            // Emit draw data to the group
+            socket.emit('draw', {
+                groupId: currentGroupId,
+                x0: lastX,
+                y0: lastY,
+                x1: e.offsetX,
+                y1: e.offsetY,
+                color: ctx.strokeStyle
+            });
+
+            lastX = e.offsetX;
+            lastY = e.offsetY;
+        });
+
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+        
+        socket.on('draw', (data) => {
+            ctx.strokeStyle = data.color;
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(data.x0, data.y0);
+            ctx.lineTo(data.x1, data.y1);
+            ctx.stroke();
+
+            // Store this drawing data
+            drawingData.push({ 
+                x0: data.x0, 
+                y0: data.y0, 
+                x1: data.x1, 
+                y1: data.y1, 
+                color: data.color 
+            });
+        });
+
+        document.getElementById('eraseBtn').onclick = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            renderPDF(currentPdfUrl); // Re-render the PDF
+            drawingData = []; // Clear drawing data
+        };
+
+        document.getElementById('downloadBtn').onclick = () => {
+            const selectedPdf = document.getElementById('pdfList').value;
+            const link = document.createElement('a');
+            link.href = selectedPdf;
+            link.download = selectedPdf.split('/').pop();
+            link.click();
+        };
+    </script>
+</body>
+</html>

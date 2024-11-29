@@ -1,0 +1,120 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast Library Example</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5; /* Light background for visibility */
+        }
+        #contextButton {
+            padding: 10px 20px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="contextButton" onclick="Toast.makeText('Button Clicked!', 3000, '#28a745', 'contextButton')">Click Me!</button>
+    
+    
+    <button id="c">Click Me!</button>
+    
+    <script>
+        // toast.js
+        
+        (function(global) {
+            class Toast {
+                constructor() {
+                    this.toastElement = document.createElement("div");
+                    this.configureToastElement();
+                    document.body.appendChild(this.toastElement);
+                }
+        
+                configureToastElement() {
+                    this.toastElement.style.position = "absolute"; // Changed to absolute for context positioning
+                    this.toastElement.style.backgroundColor = "#333"; // Default background color
+                    this.toastElement.style.color = "white";
+                    this.toastElement.style.padding = "10px";
+                    this.toastElement.style.borderRadius = "5px";
+                    this.toastElement.style.opacity = "0";
+                    this.toastElement.style.transition = "opacity 0.5s";
+                    this.toastElement.style.zIndex = "1000";
+                    this.toastElement.style.width = "auto";
+                    this.toastElement.style.maxWidth = "200px"; // Set max width
+                    this.toastElement.style.textAlign = "center";
+                    this.toastElement.style.wordWrap = "break-word"; // Wrap long text
+                }
+        
+                show(message, duration = 3000, color = "#333", contextId) { // Added contextId parameter
+                    this.toastElement.innerText = message;
+                    this.toastElement.style.backgroundColor = color; // Set custom color
+        
+                    // If a context ID is provided, position the toast relative to the element
+                    if (contextId) {
+                        const contextElement = document.getElementById(contextId);
+                        if (contextElement) {
+                            const rect = contextElement.getBoundingClientRect();
+                            this.toastElement.style.left = `${rect.left + (rect.width - this.toastElement.offsetWidth) / 2}px`;
+                            this.toastElement.style.top = `${rect.bottom + window.scrollY + 10}px`; // Position below the context element
+                            this.toastElement.style.position = "absolute"; // Ensure absolute positioning
+                        }
+                    } else {
+                        // Otherwise, center the toast in the viewport
+                        this.toastElement.style.left = `${(window.innerWidth - this.toastElement.offsetWidth) / 2}px`;
+                        this.toastElement.style.top = `${window.innerHeight / 2}px`;
+                    }
+        
+                    // Show toast
+                    this.toastElement.style.opacity = 1;
+        
+                    // Hide after specified duration
+                    setTimeout(() => {
+                        this.toastElement.style.opacity = 0;
+                    }, duration);
+                }
+        
+                static makeText(message, duration = 3000, color = "#333", contextId) {
+                    const toast = new Toast();
+                    toast.show(message, duration, color, contextId);
+                }
+            }
+        
+            // Expose the Toast class to the global object
+            global.Toast = Toast;
+        })(window);</script>
+    <script>
+        document.getElementById("c").addEventListener("click",function(){
+            Toast.makeText('helo silivestir  pannes im sure  youare  genius  i love  you baby boy!  .', 3000, '#2196F3', 'c');
+        
+            Toast.makeText('helo silivestir  pannes im sure  youare  genius  i love  you baby boy!  .', 1000, 'red', 'c');
+        
+        
+        })
+   
+
+        // Automatically show a toast without user interaction
+        setTimeout(() => {
+            Toast.makeText('This is an informational toast.', 3000, '#2196F3', 'contextButton'); // Position relative to contextButton
+        }, 4000);
+        setTimeout(() => {
+            Toast.makeText('An error occurred!', 2500, '#dc3545', 'contextButton'); // Position below the contextButton
+        }, 7000);
+        setTimeout(() => {
+            Toast.makeText('This is a default toast message.', 3000, '#333', 'contextButton'); // Position below the contextButton
+        }, 10000);
+    </script>
+</body>
+</html>

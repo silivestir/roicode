@@ -1,0 +1,17 @@
+.nav-link{
+    text-decoration: none;
+    font-weight: bold;
+    font-style: oblique;
+    color: rgb(222, 226, 231);
+    padding: 16px;
+}
+.header-bar{
+background-color: rgb(24, 104, 87);
+width:auto;
+height:6rem;
+}
+.nav-link:active{
+color:aqua;
+
+     
+}
