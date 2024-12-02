@@ -122,13 +122,13 @@ sequelize.authenticate()
 
 // Sync sequelize models
 async function syncDatabase() {
-    await User.sync({force:true});          // Create User table
-    await UserPost.sync({ force: true })       // Create UserPost table
-    await UserProfile.sync({force:true});    // Create UserProfile table
-    await Report.sync({force:true}); 
-    await Comment.sync({ force: true })
-    await Reply.sync({ force: true })
-    await Like.sync({force:true});       // Create Report table
+    await User.sync();           // Create User table
+    await UserPost.sync();        // Create UserPost table
+    await UserProfile.sync();     // Create UserProfile table
+    await Report.sync(); 
+    await Comment.sync(); 
+    await Reply.sync(); 
+    await Like.sync();       // Create Report table
 }
 
 syncDatabase().then(() => {
