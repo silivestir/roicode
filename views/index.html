@@ -94,6 +94,7 @@
       }
     }
   </style>
+    <script src="toast.js"></script>
   <script src="/splannes_routerjs/router.js"></script>
   <script>
     document.addEventListener("load",function(){
@@ -112,7 +113,7 @@
 
     <!-- Login Container -->
     <div class="login-container">
-      <h2 class="text-center" style="color:rgba(5, 5, 117, 0.877)">SignIn</h2>
+      <h2 class="text-center" style="color:rgba(5, 5, 117, 0.877)" id="j">SignIn</h2>
       <form id="login-form">
         <div class="form-floating mb-3">
           <input type="email" class="form-control" id="email" placeholder="enter  your Email please" required>
@@ -174,7 +175,7 @@ form.addEventListener('submit', async function(event) {
   const password = document.getElementById('password').value;
 
   // Debugging: alert the email to ensure it's being captured correctly
-  alert(`Email: ${email}`);
+ // alert(`Email: ${email}`);
 
   try {
     // Make a POST request to the login endpoint
@@ -197,13 +198,14 @@ form.addEventListener('submit', async function(event) {
     const data = await response.json();
 
     // If login is successful, store the token and redirect
-    alert('Login successful!');
+               
+    Toast.makeText("Login successfully!!!",4000,"green","j")
     localStorage.setItem('authToken', data.token); // Store the token in local storage
     window.location.href = '/homepage.html'; // Redirect to the homepage
 
   } catch (error) {
     // Handle any errors that occurred during the fetch or response parsing
-    alert(`An error occurred: ${error.message}`);
+    Toast.makeText(`Eror in login ${error.message}`,4000,"green","j")
   }
 });
 

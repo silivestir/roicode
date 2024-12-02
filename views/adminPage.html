@@ -242,7 +242,7 @@ const token = localStorage.getItem('authToken');
                     postElement.innerHTML = `
               <img src="img/roitech.jpg" alt="Profile Picture" class="profile-pic">
               <div class="post-content">
-                <div class="post-author">${post.User.username} <span class="post-date">- ${new Date(post.createdAt).toLocaleDateString()}</span></div>
+                <div class="post-author">${post.username} <span class="post-date">- ${new Date(post.createdAt).toLocaleDateString()}</span></div>
                 <p class="post-text " style="color:navy">
                   ${post.posttitle} 
                 </p> <p class="post-text" data-full-text="${post.content}">
@@ -490,6 +490,7 @@ document.getElementById('post-button').addEventListener('click', async (event) =
     const content = document.getElementById('post-content').value;
     const posttype = document.getElementById('post-posttype').value;
     try {
+        const username = userData.username;
       const userId = userData.id;
       const response = await fetch('../posts', {
         method: 'POST',
@@ -497,7 +498,7 @@ document.getElementById('post-button').addEventListener('click', async (event) =
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({userId,content,posttitle,posttype})
+        body: JSON.stringify({userId,content,posttitle,posttype,username})
       });
       
       if (response.ok) {

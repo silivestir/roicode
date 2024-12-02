@@ -2,10 +2,10 @@ require("dotenv").config()
 
 module.exports = {
     development: {
-        username: 'postgres1',
-        password: 'L6mExxWlGa8xCDy6hjJ2UswXbLbrlBUS',
+        username: 'postgres',
+        password: 'admin',
         database: 'postgres',
-        host: 'dpg-ct5484alqhvc73a6useg-a',
+        host: '127.0.0.1',
         port: 5432
     }
 }

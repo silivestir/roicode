@@ -6,7 +6,7 @@ const User = require('../models/userModel');
 // Create a new post
 const createPost = async (req, res) => {
     try {
-        const { userId, content ,posttitle,posttype} = req.body;
+        const { userId, content ,posttitle,posttype,username} = req.body;
 
         // Validate content
         if (!content || content.trim() === '') {
@@ -26,6 +26,7 @@ const createPost = async (req, res) => {
             like: false,
             posttitle:posttitle,
             posttype:posttype,
+            username:username,
         });
 
         // Respond with the newly created post
@@ -46,17 +47,31 @@ const getAllPosts = async (req, res) => {
         const posts = await UserPost.findAll({
             include: {
                 model: User,
-                attributes: ['username'], // Only return the username
+                attributes: ['username'], // Only return the username from User
             },
-            attributes: ['id','createdAt', 'content','posttitle','posttype','username'], // Only return the timestamp and content
+            attributes: ['id', 'createdAt', 'content', 'posttitle', 'posttype','username'], // Attributes from UserPost
         });
 
-        return res.status(200).json(posts);
+        console.log('Raw posts fetched:', JSON.stringify(posts, null, 2));
+
+        // Process the data to include username at the top level
+        const processedPosts = posts.map(post => ({
+            id: post.id,
+            createdAt: post.createdAt,
+            content: post.content,
+            posttitle: post.posttitle,
+            posttype: post.posttype,
+            username: post.User?.username, // Safely access username
+        }));
+
+        console.log('Objects have been fetched:', processedPosts);
+        return res.status(200).json(processedPosts);
     } catch (error) {
         console.error('Error fetching posts:', error);
         return res.status(500).json({ message: 'Server error' });
     }
 };
+
 // Get single post by ID
 const getPostById = async (req, res) => {
     try {

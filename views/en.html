@@ -7,24 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toast Library Example</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5; /* Light background for visibility */
-        }
-        #contextButton {
-            padding: 10px 20px; 
-            background-color: #007bff; 
-            color: white; 
-            border: none; 
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+
+
 </head>
 <body>
     <button id="contextButton" onclick="Toast.makeText('Button Clicked!', 3000, '#28a745', 'contextButton')">Click Me!</button>
@@ -94,27 +78,9 @@
         
             // Expose the Toast class to the global object
             global.Toast = Toast;
-        })(window);</script>
-    <script>
-        document.getElementById("c").addEventListener("click",function(){
-            Toast.makeText('helo silivestir  pannes im sure  youare  genius  i love  you baby boy!  .', 3000, '#2196F3', 'c');
+        })(window);
+        Toast.makeText('text tobe  printed  here ', 3000, 'green', 'c');
         
-            Toast.makeText('helo silivestir  pannes im sure  youare  genius  i love  you baby boy!  .', 1000, 'red', 'c');
-        
-        
-        })
-   
-
-        // Automatically show a toast without user interaction
-        setTimeout(() => {
-            Toast.makeText('This is an informational toast.', 3000, '#2196F3', 'contextButton'); // Position relative to contextButton
-        }, 4000);
-        setTimeout(() => {
-            Toast.makeText('An error occurred!', 2500, '#dc3545', 'contextButton'); // Position below the contextButton
-        }, 7000);
-        setTimeout(() => {
-            Toast.makeText('This is a default toast message.', 3000, '#333', 'contextButton'); // Position below the contextButton
-        }, 10000);
-    </script>
+        </script>
 </body>
 </html>
