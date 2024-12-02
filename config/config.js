@@ -2,10 +2,10 @@ require("dotenv").config()
 
 module.exports = {
     development: {
-        username: process.env.DB_U,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DATABASE,
-        host:process.env.DB_HOST,
-        port:process.env.DB_PORT
+        username:'plannes',
+        password:'g82kS63fo0xJkwU7lAjtIF9VhEUN0rfO',
+        database:'roicode',
+        host:'dpg-ct72nrbqf0us738bqe00-a',
+        port:5432
     }
 }
