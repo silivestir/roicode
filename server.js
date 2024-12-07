@@ -1,4 +1,5 @@
-/*const express = require('express');
+/*
+const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const multer = require('multer');
@@ -71,15 +72,14 @@ server.listen(3000, () => {
 });
 
 
-
-
-
-
-
 */
-                    const express = require("express");
 
-const commentRouter = require("./routes/commentRoute");
+
+
+
+
+                    const express = require("express");
+                    const commentRouter = require("./routes/commentRoute");
 const deletePostRoute = require("./routes/deletePostRoute");
     const loginRouter = require("./routes/loginRoute");
      const likesRoute = require("./routes/likesRoute");
@@ -122,13 +122,13 @@ sequelize.authenticate()
 
 // Sync sequelize models
 async function syncDatabase() {
-    await User.sync({force:true});          // Create User table
-    await UserPost.sync();       // Create UserPost table
+    await User.sync();          // Create User table
+    await UserPost.sync({force:true});       // Create UserPost table
     await UserProfile.sync({force:true});    // Create UserProfile table
-    await Report.sync({force:true}); 
-    await Comment.sync();
-    await Reply.sync(); 
-    await Like.sync({force:true});       // Create Report table
+    await Report.sync(); 
+    await Comment.sync({force:true});
+    await Reply.sync({force:true}); 
+    await Like.sync();       // Create Report table
 }
 
 syncDatabase().then(() => {
@@ -158,17 +158,17 @@ app.use('/comments', commentRouter);
 app.use('/likes',likesRoute);
 //app.use('/reports',reportsRoute);
 
-app.post("../posts/report",()=>{
-    console.log("innnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-})
+
 app.get('/', (req, res) => {
   res.redirect('views/login.html');
 });
 
 
 app.get('/audio/:filename', (req, res) => {
-    const filePath = path.join(AUDIO_DIR, req.params.filename);
-    res.sendFile(filePath);
+
+    const filePath = path.join( req.params.filename);
+    console.log("./audio/"+filePath)
+   res.sendFile("../audio/"+filePath);
 });
 
 
@@ -183,10 +183,21 @@ app.get('/audio/:filename', (req, res) => {
 
 
 
-
+ 
 setupClassSocket(server)
 
 setupSocket(server)
+
+
+setInterval(() => {
+    fetch("https://roitech-education-solution.onrender.com")
+        .then(() => {
+            console.log("Hey, I'm working");
+        })
+        .catch((error) => {
+            console.error("Error while pinging the URL:", error);
+        });
+}, 30000); 
 
 
 
