@@ -254,7 +254,7 @@ document.getElementById("otp-section").style.display="nmone";
 
                 const data = await response.json();
 
-                if (response.status === response.ok) {
+                if (response.status === 201) {
                     alert('OTP verified successfully!');
                     window.location.href = 'login.html'; // Redirect to homepage or desired URL
                 } else {
