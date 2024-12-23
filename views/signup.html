@@ -173,8 +173,8 @@ document.getElementById("otp-section").style.display="nmone";
    
     <script>
 
- const mainHeading = "Anonymous Tales";
-        const subHeading = "Share what you feel with the world, interact with a community of people and express your feelings with the world - Anonymously";
+ const mainHeading = "roi teh eduction solution";
+        const subHeading = "Wecare we share we teach";
         const typingSpeed = 100;
 
         function typeText(element, text, callback) {
@@ -254,7 +254,7 @@ document.getElementById("otp-section").style.display="nmone";
 
                 const data = await response.json();
 
-                if (response.status === response.ok) {
+                if (response.status ==201) {
                     alert('OTP verified successfully!');
                     window.location.href = 'login.html'; // Redirect to homepage or desired URL
                 } else {
