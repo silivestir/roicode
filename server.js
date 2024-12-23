@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const setupSocket = require("./controllers/socketHandler");
 const setupClassSocket = require("./controllers/classSocketHandler");
+const  setupPdfFunction=require("./controllers/setupPdfFunction");
 const sequelize = require("./config/dbConf");
 const commentRouter = require("./routes/commentRoute");
 const deletePostRoute = require("./routes/deletePostRoute");
@@ -93,7 +94,7 @@ io.on("connection", (socket) => {
 // Setup additional WebSocket handlers
 setupSocket(server);
 setupClassSocket(server);
-
+ setupPdfFunction(server)
 // Keep app awake (e.g., for Render deployment)
 setInterval(() => {
     fetch("https://roitech-education-solution.onrender.com")
