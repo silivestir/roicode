@@ -358,26 +358,62 @@ socket.on("alert-file", (filePath) => {
   renderPDF(`${filePath}`)
 });
 
-// Drawing events
+// Drawing events for mouse and touch
 canvas.addEventListener("mousedown", (e) => {
-  drawing = true;
-  [lastX, lastY] = [e.offsetX, e.offsetY];
+    drawing = true;
+    [lastX, lastY] = getMouseOrTouchPosition(e);
 });
 
 canvas.addEventListener("mousemove", (e) => {
-  if (!drawing) return;
-  const x = e.offsetX;
-  const y = e.offsetY;
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(x, y);
-  ctx.stroke();
-  socket.emit("drawing", { groupName, lastX, lastY, x, y, color: "black" });
-  [lastX, lastY] = [x, y];
+    if (!drawing) return;
+    const [x, y] = getMouseOrTouchPosition(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    socket.emit("drawing", { groupName, lastX, lastY, x, y, color: "black" });
+    [lastX, lastY] = [x, y];
 });
 
 canvas.addEventListener("mouseup", () => (drawing = false));
 canvas.addEventListener("mouseout", () => (drawing = false));
+
+// Touch event listeners
+canvas.addEventListener("touchstart", (e) => {
+    drawing = true;
+    [lastX, lastY] = getMouseOrTouchPosition(e);
+    e.preventDefault(); // Prevent default touch actions
+});
+
+canvas.addEventListener("touchmove", (e) => {
+    if (!drawing) return;
+    const [x, y] = getMouseOrTouchPosition(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    socket.emit("drawing", { groupName, lastX, lastY, x, y, color: "black" });
+    [lastX, lastY] = [x, y];
+    e.preventDefault(); // Prevent default touch actions
+});
+
+canvas.addEventListener("touchend", () => (drawing = false));
+
+// Function to get position for mouse or touch
+function getMouseOrTouchPosition(event) {
+    let x, y;
+    if (event.touches) {
+        // For touch event
+        const touch = event.touches[0];
+        x = touch.clientX - canvas.getBoundingClientRect().left;
+        y = touch.clientY - canvas.getBoundingClientRect().top;
+    } else {
+        // For mouse event
+        x = event.offsetX;
+        y = event.offsetY;
+    }
+    return [x, y];
+}
 
 socket.on("drawing", ({ lastX, lastY, x, y, color }) => {
   ctx.beginPath();
