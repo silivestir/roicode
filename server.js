@@ -60,12 +60,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post('/upload', upload.single('book'), (req, res) => {
+app.post('/upload', upload.single('fileInput'), (req, res) => {
     if (req.file) {
         const filePath = `/uploads/${req.file.filename}`;
         console.log('File uploaded:', filePath);
-        io.emit('newBook', filePath); // Notify clients
-        res.json({ message: 'Book uploaded successfully!', filePath });
+        io.emit('new-file', { filePath }); // Notify clients
+        res.json({ message: 'File uploaded successfully!', filePath });
     } else {
         res.status(400).json({ message: 'No file uploaded' });
     }
@@ -76,13 +76,27 @@ io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);
 
     // Handle WebSocket events
-    socket.on("joinGroup", (groupId) => {
+    socket.on("join-group", (groupId) => {
         console.log(`User ${socket.id} joined group ${groupId}`);
+        socket.join(groupId);
     });
 
     socket.on("pageChange", (groupId, pageNumber) => {
         console.log(`Group ${groupId} requested page ${pageNumber}`);
-        socket.broadcast.emit("pageChanged", pageNumber);
+        socket.to(groupId).emit("pageChanged", pageNumber);
+    });
+
+    socket.on("new-file", ({ filePath }) => {
+        socket.broadcast.emit("new-file", { filePath });
+    });
+
+    socket.on("file-clicked", ({ groupId, filePath }) => {
+        console.log(`File clicked in group ${groupId}: ${filePath}`);
+        socket.to(groupId).emit("alert-file", filePath);
+    });
+
+    socket.on("drawing", (data) => {
+        socket.to(data.groupName).emit('drawing', data);
     });
 
     socket.on("disconnect", () => {
@@ -96,7 +110,7 @@ setupClassSocket(server);
 
 // Keep app awake (e.g., for Render deployment)
 setInterval(() => {
-    fetch("https://roitech-education-solution.onrender.com")
+    fetch("https://your-app-url.onrender.com")
         .then(() => console.log("Ping successful"))
         .catch(err => console.error("Ping failed:", err));
 }, 30000);
