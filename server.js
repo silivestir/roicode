@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const setupSocket = require("./controllers/socketHandler");
 const setupClassSocket = require("./controllers/classSocketHandler");
+const  setupPdfFunction=require("./controllers/setupPdfFunction");
 const sequelize = require("./config/dbConf");
 const commentRouter = require("./routes/commentRoute");
 const deletePostRoute = require("./routes/deletePostRoute");
@@ -60,12 +61,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post('/upload', upload.single('fileInput'), (req, res) => {
+app.post('/upload', upload.single('book'), (req, res) => {
     if (req.file) {
         const filePath = `/uploads/${req.file.filename}`;
         console.log('File uploaded:', filePath);
-        io.emit('new-file', { filePath }); // Notify clients
-        res.json({ message: 'File uploaded successfully!', filePath });
+        io.emit('newBook', filePath); // Notify clients
+        res.json({ message: 'Book uploaded successfully!', filePath });
     } else {
         res.status(400).json({ message: 'No file uploaded' });
     }
@@ -76,27 +77,13 @@ io.on("connection", (socket) => {
     console.log("A user connected:", socket.id);
 
     // Handle WebSocket events
-    socket.on("join-group", (groupId) => {
+    socket.on("joinGroup", (groupId) => {
         console.log(`User ${socket.id} joined group ${groupId}`);
-        socket.join(groupId);
     });
 
     socket.on("pageChange", (groupId, pageNumber) => {
         console.log(`Group ${groupId} requested page ${pageNumber}`);
-        socket.to(groupId).emit("pageChanged", pageNumber);
-    });
-
-    socket.on("new-file", ({ filePath }) => {
-        socket.broadcast.emit("new-file", { filePath });
-    });
-
-    socket.on("file-clicked", ({ groupId, filePath }) => {
-        console.log(`File clicked in group ${groupId}: ${filePath}`);
-        socket.to(groupId).emit("alert-file", filePath);
-    });
-
-    socket.on("drawing", (data) => {
-        socket.to(data.groupName).emit('drawing', data);
+        socket.broadcast.emit("pageChanged", pageNumber);
     });
 
     socket.on("disconnect", () => {
@@ -107,16 +94,16 @@ io.on("connection", (socket) => {
 // Setup additional WebSocket handlers
 setupSocket(server);
 setupClassSocket(server);
-
+ setupPdfFunction(server)
 // Keep app awake (e.g., for Render deployment)
 setInterval(() => {
-    fetch("https://your-app-url.onrender.com")
+    fetch("https://roitech-education-solution.onrender.com")
         .then(() => console.log("Ping successful"))
         .catch(err => console.error("Ping failed:", err));
 }, 30000);
 
 // Start the server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 10000;
 server.listen(port, () => {
     console.log(`Server running on http://127.0.0.1:${port}`);
 });
