@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Class</title>
+  <title>roitech eduction solution</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
   
     body {
@@ -46,19 +47,193 @@
     .file-item:hover {
       background-color: #ccc;
     }
-  </style>
-</head>
-<body>
+    body {
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .navbar {
+      background-color: rgba(0, o.1, 0.5, 0.8); /* Transparent blue */
+    }
+    .report{ display: none}
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-  <header>
-    <h1>Smart Class</h1>
+    .create-post-container {
+        position: sticky;
+        top: 70px; /* Adjust based on navbar height */
+        z-index: 1000;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .posts-container {
+        /*overflow-y: auto;*/
+        flex-grow: 1;
+    }
+
+    .post {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-pic {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+
+    .post-content {
+        flex-grow: 1;
+    }
+
+    .post-author {
+        font-weight: bold;
+    }
+
+    .post-date, .time-elapsed {
+        color: #6c757d;
+        font-size: 0.9em;
+    }
+
+    .create-post-content textarea {
+        width: 100%;
+        height: 80px;
+        padding: 10px;
+        border: none;
+        resize: none;
+        font-size: 1.1rem;
+        outline: none;
+    }
+
+    .create-post-content textarea:focus {
+        box-shadow: none;
+    }
+
+    .create-post-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 10px;
+        border-top: 1px solid #e6e6e6;
+    }
+
+    .create-post-actions button {
+        padding: 6px 12px;
+    }
+
+    .create-post-options {
+        display: flex;
+        align-items: center;
+    }
+
+    .create-post-options button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #1DA1F2;
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    .create-post-options button:hover {
+        color: #007bff;
+    }
+
+
+    .read-more {
+        cursor: pointer;
+        color: #007bff;
+        text-decoration: underline;
+    }
+    .like,.comment,.report {
+      text-decoration: none;
+    }
+
+    .container-fluid {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    #posts-container {
+        padding: 10px 0;
+        height: calc(100vh - 240px); /* Adjust this value based on navbar and create post height */
+        /*overflow-y: scroll;*/
+    }
+</style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <script src="pdf.min.js"></script>
 <script src="pdf.worker.min.js"></script>
     
-     <script src="pdf.min.js"></script> 
+     <script src="pdf.min.mjs"></script> 
 
-  </header>
+   <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+  <div class="container navbar">
+    <a class="navbar-brand me-2" href="homepage.html">
+      <i class="bi bi-journal-bookmark"></i> roitecheducation
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarButtonsExample">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="homepage.html">
+            <i class="bi bi-house-door"></i> Home
+          </a>
+        </li>
+        <!-- New Nav Links -->
+        <li class="nav-item">
+          <a class="nav-link" href="profile.html">
+            <i class="bi bi-person"></i> Profile
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="advert.html">
+            <i class="bi bi-chat-dots"></i> advertisments
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="realtime-editor.html">
+            <i class="bi blink-cursor"></i>real time editor
+          </a>
+        </li>
+      
+        <li class="nav-item">
+          <a class="nav-link" href="pdfy.html">
+            <i class="bi blink-cursor"></i>realtime slides talks
+          </a>
+        </li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <span id="user-name" class="me-3"></span>
+        <button id="logout" type="button" class="btn btn-danger">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
 
   <div class="controls">
     <input type="text" id="groupName" placeholder="Enter Group Name">
@@ -94,6 +269,24 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
+
+        // Function to decode JWT token
+        function parseJwt(token) {
+          const base64Url = token.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          return JSON.parse(atob(base64));
+        }
+
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem('authToken');
+
+      
+          // Decode the token to get user data
+          const userData = parseJwt(token);
+
+          // Display the user's username in the navbar
+          document.getElementById('user-name').innerText = `Hi, ${userData.username}`;
+
   const socket = io();
 
 
@@ -218,7 +411,10 @@ document.querySelector("#pdf-next").addEventListener('click', function() {
 
 
 <script>
-
+    // Functi
+document.addEventListener("DOMContentLoaded", async function() {
+    await fetchNotifications();
+});
 
 async function fetchNotifications() {
     try {
@@ -411,6 +607,14 @@ function getMouseOrTouchPosition(event) {
     }
     return [x, y];
 }
+
+socket.on("drawing", ({ lastX, lastY, x, y, color }) => {
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+});
+
 // Voice chat setup
 document.getElementById("startVoice").addEventListener("click", async () => {
   localStream = await navigator.mediaDevices.getUserMedia({ audio: true });

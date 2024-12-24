@@ -1,55 +1,8 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-   
-    <link rel="stylesheet" href="game.css">
-    <title>accet</title>
-        <script src="gadgme.js"></script>
-  </head>
-  <body onload="done()">
-  
-  <audio id="bgMusic" src="Kanye West - Homecoming_LQ488QrqGE4.mp3"  autoplay loop>
-    <source src="Kanye West - Homecoming_LQ488QrqGE4.mp3" type="audio/mpeg">
-    <!-- Add additional <source> elements for other formats if needed -->
-    Your browser does not support the audio element.
-</audio>
 
-
-    <div id="scoreDiv">
-      <span id="score">0</span>
-      <img src="img/roitech.jpg" id="cn"alt="ggg">
-    </div>
-    <div class="gameHome" id="startPage">
-      <div id="gameTitle">Splannes-Game-..</div>
-      <button onclick="ld()" id="playBtn">
-          <span style="font-size:18px">Loading Assets<br>Please Wait...<br>This may take a few seconds for first time</span>
-      </button><br>
-      <div id="ldc"><div id="loading"></div></div>
-      <p>kama unatumia  PC tumia  left ,right,right  arrow kama unatumia  simu just touch too left to right<br>Use left/right arrow key on your PC</p>
-    </div>
-    
-    <div id="mainContainer" style="background:#0f0" >
-        <img id="city" src="img/home.jpg" alt="ggg">
-        <canvas id="myCanvas" style="/*background:#9de732*/" ></canvas>
-    </div>
-    <img class="aImg" id="t1" src="img/t2.jpg" alt="ggg">
-    <img class="aImg" id="t2" src="img/t5.jpg" alt="ggg">
-    <img class="aImg" id="t3" src="img/t2.jpg">
-    <img class="aImg" id="t4" src="img/t5.jpg" alt="ggg">
-        <img class="aImg" id="t6" src="img/roitech.jpg" alt="ggg">
-
-     
-    <img class="aImg" id="c1" src="img/c2.jpg" alt="ggg">
-
-   
-
-        <script>
 
 
 (function(){
-  
+    "use strict"
     var hw = window.innerWidth || 360;
     var hh = window.innerHeight || 560;
     var gameHome = document.getElementById("startPage");
@@ -69,7 +22,7 @@ var loaded = false;
 function done(){
     document.getElementById("ldc").innerHTML="";
     document.getElementById("ldc").style.display = "none";
-    document.getElementById("playBtn").innerHTML = "CHEZA";
+    document.getElementById("playBtn").innerHTML = "PLAY";
     loaded = true;
 }
 
@@ -96,7 +49,7 @@ function done(){
     var ctx = c.getContext("2d");
 
 function loadGame(){
- 
+    "use strict";
 
     var roadWidth = 5*w/36;
     var roadTop = h-h*0.7;
@@ -163,7 +116,7 @@ function loadGame(){
     function _i(x){
         return document.getElementById(x);
     }
-    var treeSrc = [_i("t1"),_i("t2"),_i("t3"),_i("t4")];
+    var treeSrc = [_i("t1"),_i("t2"),_i("t3"),_i("t4"),_i("t6"),_i("t7"),_i("t8"),_i("t9"),_i("t10"),_i("t11"),_i("t12")];
 
     var trees = [];
     for(var n = 0; n < ((h*0.7)/50-2); n++){
@@ -465,7 +418,3 @@ function toggleMusic() {
 // Example: Play/pause music on clicking a button
 var musicButton = document.getElementById("musicButton");
 musicButton.addEventListener("click", toggleMusic);
-</script>
-
-  </body>
-</html>
