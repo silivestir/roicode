@@ -1,44 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>folksrooms</title>
+    <title>RoiTech Education Solution</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   
-    <!-- CodeMirror Core CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/codemirror.min.css">
-    <!-- CodeMirror Theme (Dracula) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/theme/dracula.min.css">
-    <!-- JavaScript Mode -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/mode/javascript/javascript.min.js"></script>
-
-    <!-- Auto-completion Addon -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/hint/show-hint.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/hint/show-hint.min.css">
-    <script src="https://cdn.jsdelivr.net/gh/silivestir/Toast.js@main/Toast.js"></script>
-
-<script src="https://cdn.jsdelivr.net/gh/silivestir/Toast.js@main/Toast.min.js"></script>
-    <!-- Bracket Matching Addon -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/edit/matchbrackets.min.js"></script>
-
-    <!-- Auto-close Brackets Addon -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/edit/closebrackets.min.js"></script>
-
-    <!-- Line Wrapping Addon -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/wrap/hardwrap.min.js"></script>
-
-    <!-- Search Addon -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/search/search.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/search/jump-to-line.min.js"></script>
-
-    <!-- Key Bindings for Autocomplete (Ctrl+Space) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/dialog/dialog.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/addon/hint/anyword-hint.min.js"></script>
-
-    <!-- CodeMirror Core JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.6/codemirror.min.js"></script>
 
     <style>
         /* Basic reset and styling */
@@ -46,524 +15,366 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
         }
 
         body {
-            background: #f5f5f5;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
             color: #333;
         }
 
         header {
-            background: #009688;
+            background: rgba(0, 0.1, 0.5, 0.8); /* Translucent blue */
             color: #fff;
             padding: 10px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 2px solid #004d40;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         #brand-header {
-            font-size: 1.5em;
+            font-size: 1.5rem; /* Brand name font size */
             font-weight: bold;
         }
 
-        #profile-info {
-            display: flex;
-            align-items: center;
-        }
-
-        #profile-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            margin-right: 10px;
-            object-fit: cover;
-        }
-
-        #user-name {
-            font-size: 1.2em;
-        }
-
-        #nav-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        #nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.2em;
-            display: flex;
-            align-items: center;
-            transition: color 0.3s ease;
-        }
-
-        #nav-links a i {
-            margin-right: 10px;
-        }
-
-        #nav-links a:hover {
-            color: #e0f2f1;
-        }
-
-        #settings-icon {
-            color: #fff;
-            font-size: 1.5em;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        #settings-icon:hover {
-            color: #e0f2f1;
-        }
-
-        #settings-menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            background: #fff;
-            color: #333;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            padding: 10px;
-        }
-
-        #settings-menu button {
-            background: #ff5722;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            cursor: pointer;
-            margin: 5px 0;
+        /* Carousel container */
+        .carousel-container {
+            position: relative;
             width: 100%;
-            text-align: left;
-            transition: background 0.3s ease;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 15px;
         }
 
-        #settings-menu button:hover {
-            background: #e64a19;
+        /* Slide styles */
+        .carousel-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.6); /* Translucent black */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); /* Black shadow */
+            transition: transform 0.5s ease;
         }
 
-        main {
+        .slide-content {
+            text-align: center;
             padding: 20px;
+            max-width: 80%;
+            color: white;
         }
 
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            #profile-info {
-                margin-bottom: 10px;
-            }
-
-            #nav-links {
-                margin-top: 10px;
-                justify-content: flex-start;
-            }
+        button.cta-btn {
+            padding: 12px 30px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            margin-top: 20px;
         }
 
-        * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        button.cta-btn:hover {
+            background-color: #45a049;
+        }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    overflow-x: hidden;
-}
+        .expectations {
+            text-align: left; /* Left align for better readability */
+            max-width: 80%;
+            color: white;
+            margin-top: 20px;
+        }
 
-/* Carousel container */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    overflow: hidden;
-}
-
-/* Slide styles */
-.carousel-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 400px;
-    background-color: #fff;
-    transition: transform 0.5s ease;
-}
-
-.slide-content {
-    text-align: center;
-    padding: 20px;
-    max-width: 80%;
-}
-
-h1 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-p {
-    font-size: 1.2rem;
-    color: #555;
-}
-
-button.cta-btn {
-    padding: 12px 30px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-}
-
-button.cta-btn:hover {
-    background-color: #45a049;
-}
-
-/* Carousel navigation (arrows) */
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: #333;
-    background-color: transparent;
-    z-index: 10;
-}
-
-.prev, .next {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    color: white;
-    transition: background-color 0.3s;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-
-        /* Basic Reset and Layout */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    overflow-x: hidden;
-}
-
-/* Carousel container */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    overflow: hidden;
-    border-radius: 15px;
-}
-
-/* Slide styles with gradient background */
-.carousel-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 400px;
-    background: linear-gradient(45deg, rgba(0, 150, 136, 0.7), rgba(33, 150, 243, 0.7));
-    transition: transform 0.5s ease, background 1s ease;
-}
-
-.carousel-slide:nth-child(even) {
-    background: linear-gradient(45deg, rgba(255, 87, 34, 0.7), rgba(255, 193, 7, 0.7));
-}
-
-.slide-content {
-    text-align: center;
-    padding: 20px;
-    max-width: 80%;
-    color: white;
-}
-
-h1 {
-    font-size: 2.5rem;
-    color: #fff;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-}
-
-p {
-    font-size: 1.2rem;
-    color: #eee;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-    line-height: 1.6;
-}
-
-/* CTA button styling */
-button.cta-btn {
-    padding: 12px 30px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-    margin-top: 20px;
-}
-
-button.cta-btn:hover {
-    background-color: #45a049;
-}
-
-/* Carousel navigation (arrows) */
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: #fff;
-    background-color: transparent;
-    z-index: 10;
-}
-
-.prev, .next {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    color: white;
-    transition: background-color 0.3s;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-/* Gradient Text Animations */
-h1 {
-    animation: textGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes textGlow {
-    0% {
-        text-shadow: 0 0 5px #fff, 0 0 10px #4caf50, 0 0 15px #4caf50;
-    }
-    50% {
-        text-shadow: 0 0 10px #ff5722, 0 0 20px #ff5722, 0 0 30px #ff5722;
-    }
-    100% {
-        text-shadow: 0 0 5px #fff, 0 0 10px #4caf50, 0 0 15px #4caf50;
-    }
-}
-
-
+        .expectations ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <nav>
-            <div id="brand-header">folksrooms</div>
-            <div id="profile-info">
-                <img id="profile-photo" src="" alt="Profile Photo">
-                <span id="user-name"></span>
+            <div id="brand-header">RoiTech Education Solution</div>
+          
             </div>
-            <div id="nav-links">
-                <!-- Direct navigation via href -->
-                <a href="video-call.html"><i class="fas fa-video"></i> Video Call</a>
-                <a href="live-code.html"><i class="fas fa-code"></i> Live</a>
-                   <a href="pdfy.html"><i class="fas fa-code"></i>read pdf</a>
+            <div id="nav-links" style="color:white; text-decoration:none; padding :6px">
+                <a href="/index1.html" style="color:white; text-decoration:none; padding :6px"><i class="fas fa-key"></i> login</a>
+                <a href="signup.html" style="color:white; text-decoration:none; padding :6px"><i class="fas fa-lock"></i>signup</a>
+               
             </div>
-            <a id="settings-icon" href="#"><i class="fas fa-cog"></i></a>
-            <div id="settings-menu">
-                <button id="logout-button">Logout</button>
-                <button id="delete-account-button">Delete Account</button>
-                <button id="change-theme-button">Change Theme</button>
-            </div>
+           
         </nav>
     </header>
+
     <div class="carousel-container">
-        <!-- Slide 1 -->
+        <!-- Course Slides -->
         <div class="carousel-slide">
             <div class="slide-content">
-                <h1>Welcome to Folksrooms!</h1>
-                <p>Where collaboration meets real-time innovation.</p>
-                <p>Join us in a world where ideas flow seamlessly, and collaboration knows no boundaries.</p>
+                <h1>Java Course</h1>
+                <p>Learn the basics of Java and become a proficient developer.</p>
+                <p>Price: $18 (TZS 41,400)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Understand Java syntax and structure.</li>
+                        <li>Master object-oriented programming principles.</li>
+                        <li>Create Java applications from scratch.</li>
+                        <li>Debug and troubleshoot your code effectively.</li>
+                        <li>Prepare for Java certification exams.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
             </div>
         </div>
-    
-        <!-- Slide 2 -->
+
         <div class="carousel-slide">
             <div class="slide-content">
-                <h1>Real-Time Class Sessions</h1>
-                <p>Engage in live voice and PDF slide sharing.</p>
-                <p>Collaborate with your peers in real-time, enhancing the learning experience.</p>
+                <h1>JavaScript Course</h1>
+                <p>Master JavaScript, the programming language of the web.</p>
+                <p>Price: $20 (TZS 46,000)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Learn how to manipulate the DOM for dynamic web pages.</li>
+                        <li>Create interactive web applications.</li>
+                        <li>Utilize JavaScript libraries and frameworks.</li>
+                        <li>Understand asynchronous programming with Promises and async/await.</li>
+                        <li>Build projects to showcase your skills.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn">Enroll Now</button>
             </div>
         </div>
-    
-   <!-- Slide 3 -->
-   <div class="carousel-slide">
-    <div class="slide-content">
-        <h1>Video Calls for Seamless Interaction</h1>
-        <p>Stay connected through high-quality video calling.</p>
-        <p>Experience face-to-face collaboration, even if you're miles apart.</p>
-    </div>
-</div>
 
-<!-- Slide 4 -->
-<div class="carousel-slide">
-    <div class="slide-content">
-        <h1>Real-Time Code Editing</h1>
-        <p>Collaborate and code together, instantly.</p>
-        <p>Write, debug, and build code in real time with your teammates.</p>
-    </div>
-</div>
-
-<!-- Slide 5 -->
-<div class="carousel-slide">
-    <div class="slide-content">
-        <h1>Collaborate on Documents in Real-Time</h1>
-        <p>Work on documents together, no matter where you are.</p>
-        <p>See live edits, suggestions, and improvements instantly, creating better work faster.</p>
-    </div>
-</div>
-
-<!-- Slide 6 -->
-<div class="carousel-slide">
-    <div class="slide-content">
-        <h1>Voice Sessions for Instant Feedback</h1>
-        <p>Give and receive feedback, quickly and effectively.</p>
-        <p>Enhance your workflow with fast, clear communication during your sessions.</p>
-    </div>
-</div>
-
-<!-- Slide 7 -->
-<div class="carousel-slide">
-    <div class="slide-content">
-        <h1>Join the Community!</h1>
-        <p>Ready to collaborate? Sign up today and start your journey with Folksrooms!</p>
-        <button class="cta-btn">Get Started</button>
-    </div>
-</div>
-
-        <!-- Navigation -->
-        <div class="carousel-nav">
-            <span class="prev">&#10094;</span>
-            <span class="next">&#10095;</span>
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>Node.js Course</h1>
+                <p>Dive into server-side programming with Node.js.</p>
+                <p>Price: $25 (TZS 57,500)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Master server-side JavaScript programming.</li>
+                        <li>Build scalable web applications with Express framework.</li>
+                        <li>Connect your application to databases (MongoDB, MySQL).</li>
+                        <li>Learn about RESTful API development.</li>
+                        <li>Deploy your applications to the cloud.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
         </div>
-    </div>
-    
 
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>MySQL Course</h1>
+                <p>Become an expert in database management with MySQL.</p>
+                <p>Price: $22 (TZS 50,600)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Understand relational database concepts.</li>
+                        <li>Master SQL queries for data manipulation.</li>
+                        <li>Create and manage databases and tables.</li>
+                        <li>Implement data integrity and security measures.</li>
+                        <li>Perform advanced queries and data analysis.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn">Enroll Now</button>
+            </div>
+        </div>
+
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>PostgreSQL Course</h1>
+                <p>Learn the advanced features of PostgreSQL.</p>
+                <p>Price: $25 (TZS 57,500)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Understand advanced database management techniques.</li>
+                        <li>Utilize PostgreSQL's powerful SQL capabilities.</li>
+                        <li>Learn about performance tuning and optimization.</li>
+                        <li>Master data modeling and schema design.</li>
+                        <li>Implement stored procedures and triggers.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
+        </div>
+
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>HTML/CSS Course</h1>
+                <p>Get started with web development by learning HTML and CSS.</p>
+                <p>Price: $18 (TZS 41,400)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Build structured web pages using HTML5.</li>
+                        <li>Create visually appealing layouts with CSS3.</li>
+                        <li>Understand responsive design principles.</li>
+                        <li>Utilize CSS frameworks like Bootstrap.</li>
+                        <li>Optimize web pages for performance and accessibility.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
+        </div>
+
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>Bootstrap Course</h1>
+                <p>Make responsive websites quickly with Bootstrap.</p>
+                <p>Price: $20 (TZS 46,000)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Utilize Bootstrap components for rapid development.</li>
+                        <li>Create responsive grids and layouts.</li>
+                        <li>Customize Bootstrap themes and styles.</li>
+                        <li>Build mobile-first web applications.</li>
+                        <li>Practice by building real-world projects.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
+        </div>
+
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>Chemistry Course</h1>
+                <p>Explore the fundamentals of Chemistry.</p>
+                <p>Price: $23 (TZS 52,900)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Understand chemical reactions and equations.</li>
+                        <li>Learn about the periodic table and elements.</li>
+                        <li>Gain hands-on laboratory experience.</li>
+                        <li>Explore organic and inorganic chemistry concepts.</li>
+                        <li>Prepare for exams and further studies in Chemistry.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
+        </div>
+
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>Physics Course</h1>
+                <p>Dive into the fascinating world of Physics.</p>
+                <p>Price: $20 (TZS 46,000)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Explore the laws of motion and energy.</li>
+                        <li>Learn about waves, sound, and light.</li>
+                        <li>Understand electricity and magnetism.</li>
+                        <li>Gain insights into modern physics topics.</li>
+                        <li>Perform experiments to reinforce theoretical concepts.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
+        </div>
+
+        <div class="carousel-slide">
+            <div class="slide-content">
+                <h1>Biology Course</h1>
+                <p>Understand the science of life with our Biology course.</p>
+                <p>Price: $18 (TZS 41,400)</p>
+                <div class="expectations">
+                    <strong>What to Expect:</strong>
+                    <ul>
+                        <li>Learn about cellular structures and functions.</li>
+                        <li>Explore genetics and heredity principles.</li>
+                        <li>Understand ecosystem dynamics and biodiversity.</li>
+                        <li>Gain knowledge of human anatomy and physiology.</li>
+                        <li>Conduct biological experiments and field studies.</li>
+                    </ul>
+                </div>
+                <button class="cta-btn" href="signup.html">Enroll Now</button>
+            </div>
+        </div>
+
+       <!-- Navigation -->
+<div class="carousel-nav" style="display: flex; justify-content: center; align-items: center; margin: 20px 0;">
+    <span class="prev" style="margin-right: 10px; cursor: pointer;">❮ prev</span>
+    <span class="next" style="margin-left: 10px; cursor: pointer;">next ❯</span>
+</div>
+</div>
+
+<footer style="text-align: center; padding: 10px 0; background-color: #f1f1f1; color: #333;">
+    &#169; RoiTech Education Solution
+</footer>
     <script>
-// Initialize carousel variables
-let currentIndex = 0;
-const slides = document.querySelectorAll('.carousel-slide');
-const totalSlides = slides.length;
-const prevBtn = document.querySelector('.prev');
-const nextBtn = document.querySelector('.next');
+        // Initialize carousel variables
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
 
-// Function to update the carousel
-function updateCarousel() {
-  slides.forEach((slide, index) => {
-    slide.style.display=currentIndex===index?'block':'none'
-    slide.style.transform = `translateX(${(index - currentIndex) * 100}%)`;
-  });
-}
+        // Function to update the carousel
+        function updateCarousel() {
+            slides.forEach((slide, index) => {
+                slide.style.display = currentIndex === index ? 'block' : 'none';
+                slide.style.transform = `translateX(${(index - currentIndex) * 100}%)`;
+            });
+        }
 
-// Function to go to the next slide
-function goToNextSlide() {
-  currentIndex = (currentIndex + 1) % totalSlides; // Loop back to the first slide
-  updateCarousel();
-}
+        // Function to go to the next slide
+        function goToNextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides; // Loop back to the first slide
+            updateCarousel();
+        }
 
-// Function to go to the previous slide
-function goToPrevSlide() {
-  currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; // Loop to the last slide
-  updateCarousel();
-}
+        // Function to go to the previous slide
+        function goToPrevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides; // Loop to the last slide
+            updateCarousel();
+        }
 
-// Event listeners for the buttons
-nextBtn.addEventListener('click', () => {
-  goToNextSlide();
-  resetAutoSlide();
-});
-prevBtn.addEventListener('click', () => {
-  goToPrevSlide();
-  resetAutoSlide();
-});
+        // Event listeners for the buttons
+        nextBtn.addEventListener('click', () => {
+            goToNextSlide();
+            resetAutoSlide();
+        });
+        prevBtn.addEventListener('click', () => {
+            goToPrevSlide();
+            resetAutoSlide();
+        });
 
-// Automatically change slides every 5000ms
-let autoSlide = setInterval(goToNextSlide, 5000);
+        // Automatically change slides every 5000ms
+        let autoSlide = setInterval(goToNextSlide, 30000);
 
-// Reset auto-slide when the user interacts
-function resetAutoSlide() {
-  clearInterval(autoSlide);
-  autoSlide = setInterval(goToNextSlide, 5000);
-}
+        // Reset auto-slide when the user interacts
+        function resetAutoSlide() {
+            clearInterval(autoSlide);
+            autoSlide = setInterval(goToNextSlide, 30000);
+        }
 
-// Initialize the carousel
-updateCarousel();
-
+        // Initialize the carousel
+        updateCarousel();
 
         document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('authToken');
-
-            if (!token) {
-                window.location.href = '/index.html'; // Redirect to login if no token
-                return;
-            }
-
-            // Fetch user data
-            fetch('/user-profile', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-            .then(response => response.json())
-            .then(user => {
-                document.getElementById('profile-photo').src = user.photo;
-                document.getElementById('user-name').textContent = user.username;
-            })
-            .catch(err => console.error('Error:', err));
-
-            // Logout functionality
-            document.getElementById('logout-button').addEventListener('click', () => {
-                localStorage.removeItem('authToken');
-                window.location.href = '/index.html'; // Redirect to login
-            });
-
-            // JavaScript for toggling settings menu
-            document.getElementById('settings-icon').addEventListener('click', function(event) {
-                event.preventDefault();
-                const menu = document.getElementById('settings-menu');
-                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-            });
+            // Fetch user data and other functionalities (omitted for brevity)
         });
     </script>
 </body>
+
 </html>

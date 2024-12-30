@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Anonymous Tales</title>
+  <title>roitech education solution</title>
   <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/silivestir/Toast.js@main/Toast.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/silivestir/Toast.js@main/Toast.min.js"></script>
   <style>
     /* Full-page container */
     body {
@@ -111,7 +114,7 @@
     </div>
 
     <!-- Login Container -->
-    <div class="login-container">
+    <div class="login-container" id="j">
       <h2 class="text-center" style="color:rgba(5, 5, 117, 0.877)">SignIn</h2>
       <form id="login-form">
         <div class="form-floating mb-3">
@@ -126,7 +129,7 @@
           <button class="btn btn-primary btn-block" type="submit" style="color:rgba(5, 5, 117, 0.877)">SignIn</button>
         </div>
         <div class="text-center mt-3">
-          <span>Don't have an account? <a class=" " href="../signup.html" style="color:rgba(5, 5, 117, 0.877)">SignUp</a></span>
+          <span>Don't have an account? <a class=" " href="signup.html" style="color:rgba(5, 5, 117, 0.877)">SignUp</a></span>
         </div>
       </form>
     </div>
@@ -136,11 +139,13 @@
   <script>
 
     const mainHeading = "ROITECHEDUCATION SOLUTION";
-    const subHeading = `we are here to provide  you with valuable tech knowledge,including programming, omputer maintainance
-    cyber security ,internet programminf and application 1, java programming, python, tech interview experince, 
-    creating  mobile apps, compiler and  programming languages,
-    we do provide certificates ,we do offer valuable knowledge on database, microsoft, and other applications, we do offer  real time classes, real time collaborative edittings, real time code  collaboration, real time chat , 
-     also its a platform for tech and techeducations  `
+    const subHeading = `
+We are here to provide you with valuable tech knowledge, 
+including programming, computer maintenance, cybersecurity, internet programming, 
+and application development. Our offerings include Java programming, Python,
+ technical interview experience, mobile app creation, compilers, and various programming languages. 
+
+ `
     const typingSpeed = 100; // Adjust typing speed here
 
     function typeText(element, text, callback) {
@@ -174,7 +179,7 @@ form.addEventListener('submit', async function(event) {
   const password = document.getElementById('password').value;
 
   // Debugging: alert the email to ensure it's being captured correctly
-  alert(`Email: ${email}`);
+  //alert(`Email: ${email}`);
 
   try {
     // Make a POST request to the login endpoint
@@ -197,13 +202,16 @@ form.addEventListener('submit', async function(event) {
     const data = await response.json();
 
     // If login is successful, store the token and redirect
-    alert('Login successful!');
+    Toast.makeText("login successfully!", 3000, "#0FB47DFF", "j");
     localStorage.setItem('authToken', data.token); // Store the token in local storage
     window.location.href = '/homepage.html'; // Redirect to the homepage
 
   } catch (error) {
     // Handle any errors that occurred during the fetch or response parsing
-    alert(`An error occurred: ${error.message}`);
+  
+    Toast.makeText("an error  occured  durring  login !", 3000, "#D81C54FF", "j");
+
+    //alert(`An error occurred: ${error.message}`);
   }
 });
 
