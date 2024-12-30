@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Splannes DiskPoint</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>roitech education soution</title>
         <link rel="stylesheet" href="index.css">
         <link rel="stylesheet" href="codemirror.min.css">
         <link rel="stylesheet" href="dracula.css">
@@ -20,28 +21,48 @@
     background-color: blueviolet;}
    </style>
     </head>
-    <header class="header-bar">
-        <div class="header">
-            <p id="user-name"></p>
-            <a class="nav-link"  href="homepage.html">home</a>
-             <a class="nav-link"  href="pdfy.html">home</a>
-            (<select value="" id="selector">
-                <option value="javascript">js</option>
-                <option value="java">java</option>
-                <option value="php">php</option>
-                <option value="c++">C++</option>
-                <option value="sql">sql</option>
-                <option value="node">node</option>
-                <option value="kiswahiliscript">kiswahiliscript</option>
-                <option value="c">c</option>
-                <option value="golang">golang</option>
-                <option value="python">python</option>
-                <option value="html">html</option>
-                <option value="css">css</option>
-                <option value="xml">xml</option>
-             
+     <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <div class="container navbar">
+      <a class="navbar-brand me-2" href="homepage.html">
+        <i class="bi bi-journal-bookmark"></i> roitecheducation
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarButtonsExample">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+     
+          <!-- New Nav Links -->
+          <li class="nav-item">
+            <a class="nav-link" href="profile.html">
+              <i class="bi bi-person"></i> Profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="advert.html">
+              <i class="bi bi-chat-dots"></i> advertisments
+            </a>
+          </li>
+          <li class="nav-item">
 
-            </select>)<a class="nav-link" href="liveclass.html">DocEditting</a> </header>
+            <a class="nav-link"  href="pdfy.html">live slide talk
+              <i class="bi blink-cursor"></i>
+            </a>
+          </li>
+      
+      
+        </ul>
+        <div class="d-flex align-items-center">
+          <span id="user-name" class="me-3"></span>
+          <button id="logout" type="button" class="btn btn-danger">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+   
     <body>
 
         <textarea id="editor"></textarea>
@@ -81,10 +102,7 @@
           // Display the user's username in the navbar
           document.getElementById('user-name').innerText = `Hi, ${userData.username}`;
         }
-var superx="";
-            document.getElementById("selector").addEventListener("change",function(){
-                superx=document.getElementById("selector").value
-            })
+
             var user =userData.username;
             var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("editor"), {
               lineNumbers: true,
@@ -181,7 +199,7 @@ var superx="";
                 const a = document.createElement('a');
                 a.href = url;
                 const filen=prompt("choose a file name with extension ie.pdf,doc,docx,.js,.java,text,ts,php,.cpp,.py,.kiss,. any file extension you wish")
-                if(filen==="") filen="code.js"
+                if(filen==""){ filen="code.js"}
                 a.download = filen; // File name
                 document.body.appendChild(a);
                 a.click();
@@ -240,8 +258,10 @@ var superx="";
         let au=[];
         au.push(audioFiles[cc]);
                 au.forEach(file => {
+                  
                     const audioElement = document.createElement('audio');
-                    audioElement.src = file;
+                    audioElement.src=`${file}`;
+                    alert(audioElement.src)
                     audioElement.controls = true; // Show controls
                     audioElement.play(); // Auto-play after loading
                     audioContainer.appendChild(audioElement);
