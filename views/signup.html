@@ -153,7 +153,7 @@ document.getElementById("otp-section").style.display="nmone";
                     </div>
                     <button type="submit" class="btn btn-primary" style="color:rgba(5, 5, 117, 0.877)">Sign-Up</button>
                     <div class="login-btn">
-                        <p>Already have an account? <a class=" " href="../index1.html">SignIn</a></p>
+                        <p>Already have an account? <a class=" " href="../login.html">SignIn</a></p>
                     </div>
                 </form>
             </div>
@@ -173,8 +173,8 @@ document.getElementById("otp-section").style.display="nmone";
    
     <script>
 
- const mainHeading = "roitech education solution";
-//const subHeading = "Share what you feel with the world, interact with a community of people and express your feelings with the world - Anonymously";
+ const mainHeading = "Anonymous Tales";
+        const subHeading = "Share what you feel with the world, interact with a community of people and express your feelings with the world - Anonymously";
         const typingSpeed = 100;
 
         function typeText(element, text, callback) {
@@ -256,7 +256,7 @@ document.getElementById("otp-section").style.display="nmone";
 
                 if (response.status === 201) {
                     alert('OTP verified successfully!');
-                    window.location.href = 'index1.html'; // Redirect to homepage or desired URL
+                    window.location.href = 'login.html'; // Redirect to homepage or desired URL
                 } else {
                     //alert(data.message);
                 }

@@ -315,9 +315,9 @@
                 ${post.content.substring(0, 100)}... <span class="read-more">Read More</span>
                 </p>
                  <div class="post-actions">
-                <span class='like-list-${post.id}'></span><a class='like' onclick="toggleLike('${post.id}')"><i class="bi bi-hand-thumbs-up" style="color:green"></i>Enroll</a>
-                <a class='comment' href='viewPost.html' data-post-id="${post.id}"><i class="bi bi-chat-dots"></i>feedback</a>
-                <a class='report'onclick="report('${post.id}','${post.content}')" data-post-idx="${post.id}"><i class="bi bi-flag report"></i>download  certificate</a>
+                <span class='like-list-${post.id}'></span><a class='like' onclick="toggleLike('${post.id}')"><i class="bi bi-hand-thumbs-up"></i>Enroll</a>
+                <a class='comment' href='viewPost.html' data-post-id="${post.id}"><i class="bi bi-chat-dots"></i> tell something</a>
+                <a class='report'onclick="report('${post.id}','${post.content}')" data-post-idx="${post.id}"><i class="bi bi-flag report"></i> register</a>
             </div>
             `;
  
@@ -419,7 +419,7 @@ let assey_set_assey;
             if (data.likeCount >= 0) {
               const userData = parseJwt(token);
              assey_set_assey=data.username.username ;
-                likeListElement.innerText = '   ' +data.likeCount  +userData.username; // Use the display message from the response
+                likeListElement.innerText = '   ' +data.likeCount +data.username.username +userData.username; // Use the display message from the response
             } else {
                 likeListElement.innerText += ''; // No likes
             }
@@ -507,18 +507,19 @@ const generatePDF = async (name) => {
   saveAs(pdfDataUri,"newcertificate.pdf")
 };
 
-assey_set_assey===val?generatePDF(val):alert("it seem like  you are not  enrolled  yet to this course with id " +"  "+postId);
+assey_set_assey===val?generatePDF(val):alert("it seem like  you are not  enrolled  yet to that corse " +"  "+postId);
 //generatePDF(val);
 const tarehe=new Date()
 
 
+alert(tarehe)
   //post_id=postId
   //submitReport()
  // const reportModal = new bootstrap.Modal(document.getElementById("reportModal"));
   // Show the modal
   //reportModal.show();
 
-
+alert(postId)
 
 
 }

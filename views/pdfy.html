@@ -241,6 +241,8 @@
     <br>
     <input type="file" id="fileInput" />
     <br>
+    <input type="color" value="#FFFFFF" id="color"/>
+    <br>
     <button id="startVoice">Start Voice Chat</button>
     <ul id="fileList" class="file-list"></ul>
   </div>
@@ -269,6 +271,19 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
+var  color;
+var colorchooser =document.getElementById("color");
+colorchooser.addEventListener("change",function(e){
+color=e.target.value;
+
+})
+
+
+
+
+
+
+
 
         // Function to decode JWT token
         function parseJwt(token) {
@@ -483,7 +498,7 @@ let groupName;
 let localStream;
 let peers = {};
 
-// Canvas setup
+// Canvas setup in
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let drawing = false;
@@ -564,7 +579,7 @@ canvas.addEventListener("mousemove", (e) => {
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(x, y);
     ctx.stroke();
-    socket.emit("drawing", { groupName, lastX, lastY, x, y, color: "black" });
+    socket.emit("drawing", { groupName, lastX, lastY, x, y, color:color });
     [lastX, lastY] = [x, y];
 });
 
@@ -585,7 +600,8 @@ canvas.addEventListener("touchmove", (e) => {
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(x, y);
     ctx.stroke();
-    socket.emit("drawing", { groupName, lastX, lastY, x, y, color: "black" });
+   
+    socket.emit("drawing", { groupName, lastX, lastY, x, y, color:color });
     [lastX, lastY] = [x, y];
     e.preventDefault(); // Prevent default touch actions
 });
@@ -608,11 +624,14 @@ function getMouseOrTouchPosition(event) {
     return [x, y];
 }
 
-socket.on("drawing", ({ lastX, lastY, x, y, color }) => {
+socket.on("drawing", ({ lastX, lastY, x, y,color }) => {
   ctx.beginPath();
   ctx.moveTo(lastX, lastY);
   ctx.lineTo(x, y);
+ 
+  ctx.strokeStyle = color
   ctx.stroke();
+
 });
 
 // Voice chat setup
@@ -671,3 +690,24 @@ socket.on("new-peer", (peerId) => {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -363,14 +363,14 @@ document.querySelectorAll('.comment').forEach(btn => {
           // Logout function
           document.getElementById('logout').addEventListener('click', () => {
             localStorage.removeItem('authToken'); // Remove the token
-            window.location.href = 'index1.html'; // Redirect to login page
+            window.location.href = '/login.html'; // Redirect to login page
           });
 
      
 
         } else {
           // Redirect to login if no token is found
-          window.location.href = 'index1.html';
+          window.location.href = '/login.html';
         }
 
       //Like functionality

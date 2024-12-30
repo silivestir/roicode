@@ -32,11 +32,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarButtonsExample">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="homepage.html">
-              <i class="bi bi-house-door"></i> Home
-            </a>
-          </li>
+     
           <!-- New Nav Links -->
           <li class="nav-item">
             <a class="nav-link" href="profile.html">
@@ -51,19 +47,11 @@
           <li class="nav-item">
 
             <a class="nav-link"  href="pdfy.html">live slide talk
-              <i class="bi blink-cursor"></i>real time editor
+              <i class="bi blink-cursor"></i>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="viewer.html">
-              <i class="bi blink-cursor"></i>live class
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="test.html">
-              <i class="bi blink-cursor"></i>test
-            </a>
-          </li>
+      
+      
         </ul>
         <div class="d-flex align-items-center">
           <span id="user-name" class="me-3"></span>
@@ -211,7 +199,7 @@
                 const a = document.createElement('a');
                 a.href = url;
                 const filen=prompt("choose a file name with extension ie.pdf,doc,docx,.js,.java,text,ts,php,.cpp,.py,.kiss,. any file extension you wish")
-                if(filen==="") filen="code.js"
+                if(filen==""){ filen="code.js"}
                 a.download = filen; // File name
                 document.body.appendChild(a);
                 a.click();
@@ -270,8 +258,10 @@
         let au=[];
         au.push(audioFiles[cc]);
                 au.forEach(file => {
+                  
                     const audioElement = document.createElement('audio');
-                    audioElement.src = file;
+                    audioElement.src=`${file}`;
+                    alert(audioElement.src)
                     audioElement.controls = true; // Show controls
                     audioElement.play(); // Auto-play after loading
                     audioContainer.appendChild(audioElement);
