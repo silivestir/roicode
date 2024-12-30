@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel|roitech education solution </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">  <link href="https://cdn.jsdelivr.net/npm/chart.js" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .report{ display: none}
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .create-post-container {
+            position: sticky;
+            top: 70px; /* Adjust based on navbar height */
+            z-index: 1000;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .posts-container {
+            /*overflow-y: auto;*/
+            flex-grow: 1;
+        }
+
+        .post {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .post-content {
+            flex-grow: 1;
+        }
+
+        .post-author {
+            font-weight: bold;
+        }
+
+        .post-date, .time-elapsed {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .create-post-content textarea{
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: none;
+            resize: none;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .create-post-content textarea:focus {
+            box-shadow: none;
+        }
+
+        .create-post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid #e6e6e6;
+        }
+
+        .create-post-actions button {
+            padding: 6px 12px;
+        }
+
+        .create-post-options {
+            display: flex;
+            align-items: center;
+        }
+
+        .create-post-options button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #1DA1F2;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .create-post-options button:hover {
+            color: #007bff;
+        }
+
+
+        .read-more {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
+        .like,.comment,.report {
+          text-decoration: none;
+        }
+
+        .container-fluid {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #posts-container {
+            padding: 10px 0;
+            height: calc(100vh - 240px); /* Adjust this value based on navbar and create post height */
+            /*overflow-y: scroll;*/
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  </head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="container-fluid">
+            <h2 class="text-center mt-3">ROITECHEDUCATION SOLUTION ADMIN PANEL</h2>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="dashboard-link">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="user-management-link">User Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="profile-management-link">Profile Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="post-management-link">Post Management</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="content">
+        <h1 class="text-center">Roitech Admin Dashboard</h1>
+        <div class="container mt-5">
+            <!-- Active Users Counter -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Active members</h2>
+                    <p id="active-users-count">trying to find  active  people in...</p>
+                </div>
+                <div class="col-md-6">
+                    <canvas id="activeUsersChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+              <!-- Post Creation Section  -->
+      <div class="create-post-container">
+        <img src="img/roitech.jpg" alt="Profile Picture" class="profile-pic">
+        <div class="create-post-content">
+            <input type="text" id="post-posttitle" placeholder="post title /tag etc..." >      <input type="text" id="post-posttype" placeholder="post type /advert etc..." >
+          <textarea id="post-content" placeholder="What you want  to share..." required></textarea>
+          <div class="create-post-actions">
+            <div class="create-post-options">
+              <button><i class="bi bi-image"></i></button> <!-- Icon for Image Upload -->
+              <button><i class="bi bi-emoji-smile"></i></button> <!-- Icon for Emoji -->
+            </div>
+            <button type="submit" class="btn btn-primary" id="post-button">Post</button>
+          </div>
+        </div>
+      </div>
+               <!-- Posts Container -->
+               <div id="posts-container" class="posts-container">
+                Posts will be rendered here by JavaScript 
+                     </div>
+            <!-- Other content will be dynamically loaded here -->
+            <div id="dynamic-content">
+                <table id="user_table">
+                <th><tr><td>id</td><td>first name</td><td>last name</td><td>email</td><td>is staff</td><td>is Verifed</td></tr></th>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+   // Function to decode JWT token
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(atob(base64));
+}
+
+// Retrieve the token from localStorage
+const token = localStorage.getItem('authToken');
+
+
+
+
+          // Fetch posts from the server
+          async function fetchPosts() {
+            try {
+                const response = await fetch("../posts", {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`, // Pass the token for authentication
+                    'Content-Type': 'application/json'
+                  }
+                });
+                const posts = await response.json();
+
+                const postsContainer = document.getElementById('posts-container');
+                postsContainer.innerHTML = ''; // Clear container
+
+                // Loop through posts and create HTML for each post
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('post');
+                
+                    postElement.innerHTML = `
+              <img src="img/roitech.jpg" alt="Profile Picture" class="profile-pic">
+              <div class="post-content">
+                <div class="post-author">${post.User.username} <span class="post-date">- ${new Date(post.createdAt).toLocaleDateString()}</span></div>
+                <p class="post-text " style="color:navy">
+                  ${post.posttitle} 
+                </p> <p class="post-text" data-full-text="${post.content}">
+                ${post.content.substring(0, 100)}... <span class="read-more">Read More</span>
+                </p>
+                 <div class="post-actions">
+                <span class='like-list-${post.id}'></span><a class='like' onclick="deletePost('${post.id}')"><i class="bi bi-hand-thumbs-up "></i> Delete</a>
+         </div>
+            `;
+
+                    postsContainer.appendChild(postElement);
+                    
+                });
+                var post_id=""
+// Function to get post ID and redirect to a new page to view the post by ID
+document.querySelectorAll('.comment').forEach(btn => {
+  btn.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    
+    const postId = this.getAttribute('data-post-id');
+// Display the fetched postId
+    window.location.href = `viewPost.html?id=${postId}`;
+  });
+});
+
+                // Add event listener for the "Read More" functionality
+                document.querySelectorAll('.read-more').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const postText = this.previousSibling.textContent.trim();
+                        const fullText = this.parentElement.getAttribute('data-full-text');
+                        if (postText.length < fullText.length) {
+                            this.previousSibling.textContent = fullText;
+                            this.textContent = 'Read Less';
+                        } else {
+                            this.previousSibling.textContent = fullText.substring(0, 100) + '... ';
+                            this.textContent = 'Read More';
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+          }   
+
+
+window.onload=fetchPosts() ;
+
+      //Like functionality
+      
+      async function deletePost(postId) {
+            try {
+              const userData = parseJwt(token);
+              
+              const userId=userData.id;
+                const response = await fetch(`../delete/posts/`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({postId,userId})
+                });
+
+                if (response.ok) {
+                   fetchPosts()
+                } else {
+                    console.error('Error liking post:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error liking post:', error);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // To keep track of user logins by date
+        const activeUsersData = {}; // To store the date and user count
+
+        // Function to fetch active users and update the chart
+        async function fetchActiveUsers() {
+            try {
+                const response = await fetch('/users'); // Adjust URL as necessary
+                const data = await response.json();
+                const activeUsersCount = data.length; // Assuming response is an array of users
+                document.getElementById('active-users-count').innerText = activeUsersCount;
+
+                // Get today's date in YYYY-MM-DD format
+                const today = new Date();
+                const dateKey = today.toISOString().split('T')[0]; // Get only the date part
+
+                // Update the active users data
+                if (!activeUsersData[dateKey]) {
+                    activeUsersData[dateKey] = 0; // Initialize if not present
+                }
+                activeUsersData[dateKey] += activeUsersCount; // Increment user count for the day
+
+                // Prepare data for the line chart
+                const labels = Object.keys(activeUsersData); // Dates
+                const userCounts = Object.values(activeUsersData); // Corresponding user counts
+
+                const ctx = document.getElementById('activeUsersChart').getContext('2d');
+                if (window.activeUsersChart) {
+                    window.activeUsersChart.destroy(); // Destroy the previous chart instance
+                }
+                window.activeUsersChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Active Users',
+                            data: userCounts,
+                            fill: false,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            tension: 0.1,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Number of Active Users'
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching active users:', error);
+            }
+        }
+
+        // Fetch active users on page load
+        fetchActiveUsers();
+
+        // Event listeners for navigation links
+        document.getElementById('dashboard-link').addEventListener('click', function() {
+            document.getElementById('dynamic-content').innerHTML = '<h2 >Dashboard Content Here</h2>';
+        });
+
+        document.getElementById('user-management-link').addEventListener('click', function() {
+            document.getElementById('dynamic-content').innerHTML = '<h2>User Management</h2>';
+            // Fetch and display users here
+            async function fetchUserData(){
+                try{
+                    const response = await fetch("../users", {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`, // Pass the token for authentication
+                    'Content-Type': 'application/json'
+                  }
+                });
+                const user_data = await response.json();
+
+user_data.forEach(u=>{
+
+
+
+
+
+})
+                }
+                catch(error)
+                {console.log({error:`Unable to fetch users`})}
+            }
+        });
+
+
+
+
+        document.getElementById('profile-management-link').addEventListener('click', function() {
+            document.getElementById('dynamic-content').innerHTML = '<h2>Profile Management</h2>';
+            // Fetch and display profiles here
+        });
+
+        document.getElementById('post-management-link').addEventListener('click', function() {
+            document.getElementById('dynamic-content').innerHTML = `
+            <h2>Post Management</h2> 
+            
+               <!-- Posts Container -->
+      <div id="posts-container" class="posts-container">
+ Posts will be rendered here by JavaScript 
+      </div>
+            
+            `;
+            // Fetch and display posts here
+        });
+
+        
+
+
+
+        
+
+
+  
+
+if (token) {
+  // Decode the token to get user data
+  const userData = parseJwt(token);
+
+  // Display the user's username in the navbar
+
+
+  const userId=userData.id;
+
+
+// Handle post submission
+document.getElementById('post-button').addEventListener('click', async (event) => {
+    event.preventDefault();
+    
+    const posttitle= document.getElementById('post-posttitle').value;
+
+    const content = document.getElementById('post-content').value;
+    const posttype = document.getElementById('post-posttype').value;
+    try {
+      const userId = userData.id;
+      const response = await fetch('../posts', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({userId,content,posttitle,posttype})
+      });
+      
+      if (response.ok) {
+    // Reload the posts
+    fetchPosts() 
+      } else {
+        console.error('Error posting:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error posting:', error);
+    }
+  });
+
+} else {
+  // Redirect to login if no token is found
+  window.location.href = '/login.html';
+}
+
+    </script>
+</body>
+</html>
