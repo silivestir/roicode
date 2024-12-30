@@ -83,8 +83,8 @@ const createUser = async (req, res) => {
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: process.env.EMAIL_USER,  // Hardcoded email user
-        pass: process.env.EMAIL_PASS       // Hardcoded email password
+        user:"silvestiriassey@gmail.com",  // Hardcoded email user
+        pass: "urzt ftqf caxa rhwk"       // Hardcoded email password
     }
 });
 
