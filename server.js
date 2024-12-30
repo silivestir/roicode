@@ -33,7 +33,7 @@ const postRouter = require("./routes/userPostRoute");
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-
+const servers = http.createServer(app);
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("views"));
 app.use(express.static("uploads")); // For serving uploaded files
-
+app.use(express.static("audio"));
 // Sync database
 
 // Setup additional WebSocket handlers
@@ -58,10 +58,10 @@ const setupPdfFunction = (server) => {
     let users = {};
     let files = {};
 
-    const io = socketIo(server);
+    const ioo = socketIo(servers);
 
 
-    io.on('connection', (socket) => {
+    ioo.on('connection', (socket) => {
         console.log('A user connected:', socket.id);
 
         let groupName = null;
@@ -80,7 +80,7 @@ const setupPdfFunction = (server) => {
         // Handle file clicked event (open the file)
         socket.on('file-clicked', (data) => {
             console.log(`File clicked: ${data.filePath}`);
-            io.to(groupName).emit('alert-file', data.filePath);
+            ioo.to(groupName).emit('alert-file', data.filePath);
         });
 
         // Handle drawing events
@@ -128,7 +128,7 @@ const setupPdfFunction = (server) => {
         files[groupName].push(filePath);
 
         // Emit file upload event to group members
-        io.to(groupName).emit('new-file', { filePath });
+        ioo.to(groupName).emit('new-file', { filePath });
 
         res.json({ filePath });
     });
@@ -137,6 +137,23 @@ const setupPdfFunction = (server) => {
     return uploadRoute;
 };
 
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    const filePath = `/uploads/${req.file.filename}`;
+    const groupName = req.body.groupName;
+
+    // Save file info in memory (you could save it to a database here)
+    if (!files[groupName]) {
+        files[groupName] = [];
+    }
+
+    files[groupName].push(filePath);
+
+    // Emit file upload event to group members
+    io.to(groupName).emit('new-file', { filePath });
+
+    res.json({ filePath });
+});
 
 
 sequelize.authenticate()
@@ -167,8 +184,8 @@ app.use('/likes', likesRoute);
 
 setupSocket(server);
 setupClassSocket(server);
-setupPdfFunction(server)
-    // Keep app awake (e.g., for Render deployment)
+//setupPdfFunction(server)
+// Keep app awake (e.g., for Render deployment)
 setInterval(() => {
     fetch("https://roitech-education-solution.onrender.com")
         .then(() => console.log("Ping successful"))
@@ -180,6 +197,7 @@ const port = process.env.PORT || 10000;
 server.listen(port, () => {
     console.log(`Server running on http://127.0.0.1:${port}`);
 });
+
 
 
 /*
