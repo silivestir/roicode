@@ -7,7 +7,7 @@ const User = require('../models/userModel');
 const createPost = async (req, res) => {
     try {
         const { userId, content ,posttitle,posttype,username} = req.body;
-
+console.log(userId,content)
         // Validate content
         if (!content || content.trim() === '') {
             return res.status(400).json({ message: 'Content cannot be empty' });
