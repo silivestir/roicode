@@ -168,7 +168,7 @@
             <!-- Active Users Counter -->
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Active members</h2>
+                    <h2>users online</h2>
                     <p id="active-users-count">trying to find  active  people in...</p>
                 </div>
                 <div class="col-md-6">
@@ -243,7 +243,7 @@ const token = localStorage.getItem('authToken');
                     postElement.innerHTML = `
               <img src="img/roitech.jpg" alt="Profile Picture" class="profile-pic">
               <div class="post-content">
-                <div class="post-author">${post.User.username} <span class="post-date">- ${new Date(post.createdAt).toLocaleDateString()}</span></div>
+                <div class="post-author"><!--${post.User.username}--> <span class="post-date">- ${new Date(post.createdAt).toLocaleDateString()}</span></div>
                 <p class="post-text " style="color:navy">
                   ${post.posttitle} 
                 </p> <p class="post-text" data-full-text="${post.content}">
