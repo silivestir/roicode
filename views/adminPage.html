@@ -477,7 +477,7 @@ if (token) {
 
   // Display the user's username in the navbar
 
-
+const  username=userData.username;
   const userId=userData.id;
 
 
@@ -497,7 +497,7 @@ document.getElementById('post-button').addEventListener('click', async (event) =
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({userId,content,posttitle,posttype})
+        body: JSON.stringify({userId,content,posttitle,posttype,username})
       });
       
       if (response.ok) {
