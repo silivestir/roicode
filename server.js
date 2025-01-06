@@ -166,7 +166,7 @@ sequelize.authenticate()
     .catch(err => console.error("Database connection failed:", err));
 
 async function syncDatabase() {
-    await sequelize.sync({force:false}); // Sync all models
+    await sequelize.sync({force:true}); // Sync all models
     console.log("Database synced successfully.");
 }
 syncDatabase();
