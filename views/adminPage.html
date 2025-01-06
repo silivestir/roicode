@@ -477,9 +477,9 @@ if (token) {
 
   // Display the user's username in the navbar
 
-const  username=userData.username;
-  const userId=userData.id;
 
+  const userId=userData.id;
+const username=userData.username;
 
 // Handle post submission
 document.getElementById('post-button').addEventListener('click', async (event) => {
@@ -491,7 +491,8 @@ document.getElementById('post-button').addEventListener('click', async (event) =
     const posttype = document.getElementById('post-posttype').value;
     try {
       const userId = userData.id;
-      const response = await fetch('../posts', {
+      const  us=userData.username;
+      const response = await fetch('/posts', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
